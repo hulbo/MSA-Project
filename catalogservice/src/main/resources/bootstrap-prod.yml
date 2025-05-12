@@ -1,0 +1,6 @@
+spring:
+  cloud:
+    config:
+      uri: http://${OCI_SERVICE_PRIVATE}:8888
+      name: common
+      active: prod
