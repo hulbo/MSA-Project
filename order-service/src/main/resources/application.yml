@@ -1,0 +1,47 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  application:
+    name: order-service
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
+  sql:
+    init:
+      mode: always #초기 구동시 스크립트 실행
+  datasource:
+    url: ${DB_URL}
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    username: ${DB_INFO}
+    password: ${DB_INFO}
+    initialization-mode: always
+    hikari:
+      data-source-properties:
+        oracle:
+          jdbc:
+            timezoneAsRegion: false
+  jpa:
+    hibernate:
+      ddl-auto: update # 테이블 생성 또는 업데이트
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.OracleDialect
+
+logging:
+  level:
+    com.example.orderservice: DEBUG
+
+greeting:
+  message: Welcome to the sample Catalog Service
+
+# actuator 설정
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans #, busrefresh, info, metrics, prometheus
+
+# spring-config-server 에서 가져옴
+#token:
+#  expiration_time: 86400000 # 토큰유지시간: 86400000(하루)
+#  secret: 6vDUdUShZnSNyRNfO656IW80jMjA0TdVLJDEn0z46wU+gewYgsVahmyGgxXWmxff2wwNXxXxxnakaqzgRviVeg== # HS512로 생성해서 사용해야함
