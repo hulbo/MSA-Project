@@ -1,0 +1,4 @@
+eureka:
+  client:
+    eureka-server-connect-timeout-seconds: 5  # 연결 제한 시간 (초)
+    eureka-server-read-timeout-seconds: 10    # 읽기 제한 시간 (초)

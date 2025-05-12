@@ -1,0 +1,90 @@
+server:
+  port: ${SERVER_PORT:8000}
+
+spring:
+  main:
+    web:
+      application:
+        type: reactive
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
+  application:
+    name: apigateway-service
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true # 디스커버리 활성화
+      default-filters:
+        - name: GlobalFilter
+          args:
+            baseMessage: Spring Cloud Gateway Global Filter
+            preLogger: true
+            postLogger: true
+      routes:
+        - id: user-service-routes
+          # uri: http://111.111.111.111:8081/
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/login
+            - Method=POST
+          filters:
+            #- AddRequestHeader=first-request, first-Request-header2
+            #- AddResponseHeader=first-request, first-Response-header2
+            #- StripPrefix=1
+            #- CustomFilter
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+        - id: user-service-routes
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/users
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+        - id: user-service-routes
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/actuator
+            - Method=GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+        - id: user-service-routes
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter # 토큰으로 권한 체크
+        - id: catalog-service-routes
+          uri: lb://CATALOG-SERVICE
+          predicates:
+            - Path=/catalog-service/**
+          filters:
+            - CustomFilter
+            - RewritePath=/catalog-service/(?<segment>.*), /$\{segment}
+        - id: order-service-routes
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/order-service/**
+          filters:
+            - CustomFilter
+            - RewritePath=/order-service/(?<segment>.*), /$\{segment}
+
+logging:
+  level:
+    com.example.apigatewayservice: DEBUG
+
+# spring-config-server 에서 가져옴
+# token:
+#  secret: 6vDUdUShZnSNyRNfO656IW80jMjA0TdVLJDEn0z46wU+gewYgsVahmyGgxXWmxff2wwNXxXxxnakaqzgRviVeg== # HS512로 생성해서 사용해야함
+
+# actuator 설정
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, httptrace #, busrefresh, info, metrics, prometheus
