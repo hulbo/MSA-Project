@@ -1,0 +1,13 @@
+eureka:
+  instance:
+    prefer-ip-address: true
+    ip-address: ${OCI_SERVICE_PRIVATE} # 외부접근 IP
+    non-secure-port: ${PUBLIC_SERVER_PORT} # 외부접근 PORT
+    instance-id: ${OCI_SERVICE_PRIVATE}:${PUBLIC_SERVER_PORT}
+    status-page-url: http://${OCI_SERVICE_PRIVATE}:${PUBLIC_SERVER_PORT}/info
+    health-check-url: http://${OCI_SERVICE_PRIVATE}:${PUBLIC_SERVER_PORT}/healthCheck
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://${OCI_SERVICE_PRIVATE}:8761/eureka
