@@ -10,10 +10,6 @@ spring:
     init:
       mode: always #초기 구동시 스크립트 실행
   datasource:
-    url: ${DB_URL}
-    driver-class-name: oracle.jdbc.driver.OracleDriver
-    username: ${DB_INFO}
-    password: ${DB_INFO}
     initialization-mode: always
     hikari:
       data-source-properties:

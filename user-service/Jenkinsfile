@@ -48,7 +48,6 @@ pipeline {
                     echo "▶ 적용된 ACTIVE_PROFILE: ${env.ACTIVE_PROFILE}"
                     echo "▶ Docker 이미지 태그: ${env.IMAGE_TAG}"
                     echo "▶ Docker 전체 이미지 명: ${env.FULL_IMAGE_NAME}"
-                    echo "▶ Config Server 사용자 ID: $GIT_CONFIG_REPO_ID"
                 }
             }
         }
