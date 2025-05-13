@@ -4,3 +4,6 @@
 ## 📌 기능
 - Git 기반 설정 관리
 - 모든 서비스에 설정 제공
+
+## ※ 로컬설정
+- 환경변수 추가해야함: GIT_CONFIG_REPO_ID=아이디;GIT_CONFIG_REPO_PASSWORD=비밀번호
