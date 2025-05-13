@@ -53,14 +53,14 @@ pipeline {
 
         stage('Build with Maven') {
             steps {
-                sh 'mvn clean package -DskipTests'
+                sh 'cd config && mvn clean package -DskipTests'
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 script {
-                    def result = sh(script: "docker build -t ${env.FULL_IMAGE_NAME} .", returnStatus: true)
+                    def result = sh(script: "cd config && docker build -t ${env.FULL_IMAGE_NAME} .", returnStatus: true)
                     if (result != 0) {
                         error "▶ Docker 이미지 빌드 실패!"
                     }
