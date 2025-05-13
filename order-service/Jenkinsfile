@@ -48,23 +48,20 @@ pipeline {
                     echo "▶ 적용된 ACTIVE_PROFILE: ${env.ACTIVE_PROFILE}"
                     echo "▶ Docker 이미지 태그: ${env.IMAGE_TAG}"
                     echo "▶ Docker 전체 이미지 명: ${env.FULL_IMAGE_NAME}"
-                    echo "▶ 환경변수: DB_URL: $DB_URL"
-                    echo "▶ 환경변수: DB_INFO: $DB_INFO"
-                    echo "▶ 환경변수: AWS_SERVICE_PRIVATE: $AWS_SERVICE_PRIVATE"
                 }
             }
         }
 
         stage('Build with Maven') {
             steps {
-                sh 'mvn clean package -DskipTests'
+                sh 'cd order-service && mvn clean package -DskipTests'
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 script {
-                    def result = sh(script: "docker build -t ${env.FULL_IMAGE_NAME} .", returnStatus: true)
+                    def result = sh(script: "cd order-service && docker build -t ${env.FULL_IMAGE_NAME} .", returnStatus: true)
                     if (result != 0) {
                         error "▶ Docker 이미지 빌드 실패!"
                     }
@@ -85,7 +82,7 @@ pipeline {
                                     docker rm ${containerName}
                                 fi
 
-                                docker run -d --name ${containerName} -p ${port}:8080 -e PUBLIC_SERVER_PORT=${port} -e DB_URL=$DB_URL -e DB_INFO=$DB_INFO -e OCI_SERVICE_PRIVATE=$OCI_SERVICE_PRIVATE -e SPRING_PROFILES_ACTIVE=${env.ACTIVE_PROFILE} -e EUREKA_INSTANCE_ID=${containerName} ${env.FULL_IMAGE_NAME}
+                                docker run -d --name ${containerName} -p ${port}:8080 -e PUBLIC_SERVER_PORT=${port} -e OCI_SERVICE_PRIVATE=$OCI_SERVICE_PRIVATE -e SPRING_PROFILES_ACTIVE=${env.ACTIVE_PROFILE} -e EUREKA_INSTANCE_ID=${containerName} ${env.FULL_IMAGE_NAME}
 
                                 docker image prune -f
                             """
