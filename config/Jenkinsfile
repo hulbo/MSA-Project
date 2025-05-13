@@ -47,6 +47,7 @@ pipeline {
                     echo "▶ 적용된 Spring Profile: ${env.ACTIVE_PROFILE}"
                     echo "▶ Docker 이미지 태그: ${env.IMAGE_TAG}"
                     echo "▶ Docker 전체 이미지 명: ${env.FULL_IMAGE_NAME}"
+                    echo "▶ Config Server 사용자 ID: $GIT_CONFIG_REPO_ID"
                 }
             }
         }
@@ -77,7 +78,7 @@ pipeline {
                             docker rm ${env.IMAGE_NAME}
                         fi
 
-                        docker run -d --name ${env.IMAGE_NAME} -p ${env.PORT} -e SPRING_PROFILES_ACTIVE=${env.ACTIVE_PROFILE} ${env.FULL_IMAGE_NAME}
+                        docker run -d --name ${env.IMAGE_NAME} -p ${env.PORT} -e GIT_CONFIG_REPO_ID=$GIT_CONFIG_REPO_ID -e GIT_CONFIG_REPO_PASSWORD=$GIT_CONFIG_REPO_PASSWORD -e SPRING_PROFILES_ACTIVE=${env.ACTIVE_PROFILE} ${env.FULL_IMAGE_NAME}
 
                         docker image prune -f
                     """
