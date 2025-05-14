@@ -4,6 +4,11 @@ server:
 spring:
   application:
     name: config-service
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: 5672
+    username: ${RABBITMQ_ID}
+    passwd: ${RABBITMQ_ID}
   cloud:
     config:
       server:
@@ -11,3 +16,10 @@ spring:
           uri: https://github.com/hulbo/springcloud_configservice_repo.git
           username: ${GIT_CONFIG_REPO_ID}
           password: ${GIT_CONFIG_REPO_PASSWORD}
+
+# actuator 설정
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, busrefresh
