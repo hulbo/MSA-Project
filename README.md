@@ -4,11 +4,14 @@
 ## 📜 서비스 목록
 - **apigate**: API Gateway (Spring Cloud Gateway)
 - **discover**: 서비스 검색 및 등록 (Eureka)
-- **config**: 중앙 설정 관리 (Spring Cloud Config)
-- **common**: 공통으로 사용하는 기능(다른서비스에서 빌드해서 배포한다.)
+- **config**: 
+  - 중앙 설정 관리 (Spring Cloud Config)
+  - yml파일은 github에 private로 저장되어 있다.
+- **common**: 
+  - 공통으로 사용하는 기능 
+  - 다른서비스에서 참조하여 사용함
 ---
 - **user**: 사용자 관리 서비스
-
 
 ## 🔧 기술 스택
 - **Back-End**: Spring Boot, Spring Cloud
