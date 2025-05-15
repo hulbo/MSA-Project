@@ -3,33 +3,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.4</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<groupId>hulbo.msa</groupId>
+		<artifactId>MSA-Project</artifactId>
+		<version>1.0.0</version>
 	</parent>
-	<groupId>com.example</groupId>
-	<artifactId>apigatewayservice</artifactId>
+	<artifactId>apigateway</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>apigatewayservice</name>
-	<description>Demo project for Spring Boot</description>
-	<url/>
-	<licenses>
-		<license/>
-	</licenses>
-	<developers>
-		<developer/>
-	</developers>
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
-	<properties>
-		<java.version>17</java.version>
-		<spring-cloud.version>2024.0.1</spring-cloud.version>
-	</properties>
+	<name>apigateway</name>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -98,17 +78,6 @@
 			<artifactId>spring-cloud-starter-bus-amqp</artifactId>
 		</dependency>
 	</dependencies>
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>${spring-cloud.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 
 	<build>
 		<plugins>
@@ -127,16 +96,13 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<!-- 고정된 JAR 파일 이름 설정 -->
-					<finalName>apigatewayservice</finalName>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
