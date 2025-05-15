@@ -41,14 +41,13 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifestEntries>
-							<!-- 수동으로 Main-Class를 설정 -->
-							<Main-Class>hulbo.msa.discoverservice.DiscoverserviceApplication</Main-Class>
-						</manifestEntries>
-					</archive>
-				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
