@@ -138,6 +138,12 @@
 			<artifactId>spring-cloud-starter-bus-amqp</artifactId>
 		</dependency>
 
+		<!-- 개별공통으로 생성 -->
+		<dependency>
+			<groupId>hulbo.msa</groupId>
+			<artifactId>common</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
         </processorPath>
         <module name="common" />
       </profile>
@@ -19,7 +20,7 @@
         <module name="discoverservice" />
         <module name="configservice" />
       </profile>
-      <profile name="Annotation profile for catalogs" enabled="true">
+      <profile name="Annotation profile for userservice" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -28,8 +29,8 @@
         </processorPath>
         <module name="apigatewayservice" />
         <module name="catalogs" />
-        <module name="orderservice" />
         <module name="userservice" />
+        <module name="orderservice" />
       </profile>
     </annotationProcessing>
   </component>

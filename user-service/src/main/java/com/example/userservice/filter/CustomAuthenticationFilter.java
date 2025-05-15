@@ -4,7 +4,7 @@ package com.example.userservice.filter;
 
 import com.example.userservice.dto.UserDto;
 import com.example.userservice.service.UserService;
-import com.example.userservice.util.ResponseUtil;
+import hulbo.msa.common.util.ResponseUtil;
 import com.example.userservice.vo.RequestLogin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;

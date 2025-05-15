@@ -1,8 +1,9 @@
-package com.example.userservice.util;
+package hulbo.msa.common.util;
 
-import java.util.Map;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+
+import java.util.Map;
 
 public class JsonUtil {
     private static final ObjectMapper objectMapper = new ObjectMapper();
