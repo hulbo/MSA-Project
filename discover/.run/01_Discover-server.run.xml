@@ -2,7 +2,7 @@
   <configuration default="false" name="01_Discover-server" type="Application" factoryName="Application">
     <option name="ALTERNATIVE_JRE_PATH" value="openjdk-23" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-    <option name="MAIN_CLASS_NAME" value="com.example.discoverservice.DiscoverserviceApplication" />
+    <option name="MAIN_CLASS_NAME" value="hulbo.msa.discoverservice.DiscoverserviceApplication" />
     <module name="discoverservice" />
     <option name="VM_PARAMETERS" value="-Dspring.profiles.active=local" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/discover" />

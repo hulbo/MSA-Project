@@ -1,4 +1,4 @@
-package com.example.discoverservice;
+package hulbo.msa.discoverservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

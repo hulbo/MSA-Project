@@ -20,16 +20,16 @@
         <module name="discoverservice" />
         <module name="configservice" />
       </profile>
-      <profile name="Annotation profile for userservice" enabled="true">
+      <profile name="Annotation profile for MSA-Project" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
         </processorPath>
         <module name="apigatewayservice" />
         <module name="catalogs" />
-        <module name="userservice" />
         <module name="orderservice" />
       </profile>
     </annotationProcessing>
@@ -40,7 +40,7 @@
       <module name="catalogs" options="-parameters" />
       <module name="common" options="-parameters" />
       <module name="configservice" options="-parameters" />
-      <module name="discoverservice" options="-parameters" />
+      <module name="discoverservice" options="" />
       <module name="orderservice" options="-parameters" />
       <module name="userservice" options="-parameters" />
     </option>

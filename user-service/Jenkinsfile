@@ -52,7 +52,13 @@ pipeline {
             }
         }
 
-        stage('Build with Maven') {
+        stage('Build Common Module') {
+            steps {
+                sh 'cd common && mvn clean install -DskipTests'
+            }
+        }
+
+        stage('Build User Service') {
             steps {
                 sh 'cd user-service && mvn clean package -DskipTests'
             }
