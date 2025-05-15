@@ -2,7 +2,7 @@
 FROM openjdk:17-jdk-slim
 
 # ✅ 빌드 시 전달할 JAR 파일 변수 설정
-ARG COMMON_JAR=common/target/common-starter-1.0.0.jar
+ARG COMMON_JAR=common/target/common-start-fixed.jar
 ARG USER_JAR=user-service/target/userservice.jar
 
 # ✅ 공통 모듈 JAR 복사
