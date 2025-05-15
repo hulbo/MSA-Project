@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 // 환경 변수 설정을 위한 클래스 import (Spring Framework의 Environment로 수정)
 
+import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -29,6 +30,7 @@ import java.util.Map;
 
 @Slf4j
 @Configuration
+@Order(1) // 🔹 낮은 우선순위를 설정
 public class WebSecurity {
 
     // UserService와 암호화 처리를 위한 Encoder, 환경 변수 객체 선언

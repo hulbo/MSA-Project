@@ -1,8 +1,8 @@
 eureka:
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${server.port}}
-    status-page-url: http://localhost:${server.port}/info
-    health-check-url: http://localhost:${server.port}/healthCheck
+    status-page-url: http://localhost:${server.port}/info/info
+    health-check-url: http://localhost:${server.port}/info/healthCheck
   client:
     register-with-eureka: true
     fetch-registry: true

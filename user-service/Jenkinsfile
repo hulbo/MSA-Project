@@ -1,25 +1,30 @@
+// 서비스 포트 설정
 def ports = ['10000']
 
 pipeline {
     agent any
+
+    // 사용할 빌드 도구 설정 (Maven)
     tools {
         maven "Maven_3.9.9"
     }
 
     environment {
-        DOCKER_HUL_ID = "hulbo"
-        IMAGE_NAME = "sc_userservice"
+        DOCKER_HUL_ID = "hulbo"               // Docker Hub ID
+        IMAGE_NAME = "sc_userservice"         // 생성할 Docker 이미지 이름
     }
 
     stages {
         stage('Clean dangling Docker images') {
             steps {
+                // 사용하지 않는 Docker 이미지 정리
                 sh 'docker image prune -f'
             }
         }
 
         stage('Checkout') {
             steps {
+                // Git 저장소에서 최신 코드 가져오기
                 checkout scm
             }
         }
@@ -27,8 +32,11 @@ pipeline {
         stage('Set Spring Profile') {
             steps {
                 script {
+                    // 현재 브랜치 확인
                     def branch = sh(script: "git branch -r --contains HEAD | grep origin/ | head -n 1 | sed 's@origin/@@'", returnStdout: true).trim()
                     def profile = 'local'
+
+                    // 브랜치에 따라 Spring Profile 설정
                     if (branch == 'main') {
                         profile = 'prod'
                     } else if (branch == 'develop') {
@@ -39,6 +47,7 @@ pipeline {
 
                     def tag = 'latest'
 
+                    // 환경 변수 설정
                     env.BRANCH = branch
                     env.ACTIVE_PROFILE = profile
                     env.IMAGE_TAG = tag
@@ -54,12 +63,14 @@ pipeline {
 
         stage('Build Common Module') {
             steps {
+                // 공통 모듈 빌드 (테스트 제외)
                 sh 'cd common && mvn clean install -DskipTests'
             }
         }
 
         stage('Build User Service') {
             steps {
+                // 유저 서비스 빌드 (테스트 제외)
                 sh 'cd user-service && mvn clean package -DskipTests'
             }
         }
@@ -67,7 +78,9 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
+                    // Docker 이미지 생성 (user-service 기준)
                     def result = sh(script: "cd user-service && docker build -t ${env.FULL_IMAGE_NAME} .", returnStatus: true)
+
                     if (result != 0) {
                         error "▶ Docker 이미지 빌드 실패!"
                     }
@@ -80,14 +93,23 @@ pipeline {
                 script {
                     for (port in ports) {
                         def containerName = "${env.IMAGE_NAME}_${port}"
+
                         sh """
+                            # 기존 컨테이너가 있으면 삭제 후 재시작
                             if docker ps -a --format "{{.Names}}" | grep -q "^${containerName}\$"; then
                                 docker stop ${containerName}
                                 docker rm ${containerName}
                             fi
 
-                            docker run -d --name ${containerName} -p ${port}:8080 -e PUBLIC_SERVER_PORT=${port} -e OCI_SERVICE_PRIVATE=$OCI_SERVICE_PRIVATE -e SPRING_PROFILES_ACTIVE=${env.ACTIVE_PROFILE} -e EUREKA_INSTANCE_ID=${containerName} ${env.FULL_IMAGE_NAME}
+                            # 컨테이너 실행
+                            docker run -d --name ${containerName} -p ${port}:8080 \
+                                -e PUBLIC_SERVER_PORT=${port} \
+                                -e OCI_SERVICE_PRIVATE=$OCI_SERVICE_PRIVATE \
+                                -e SPRING_PROFILES_ACTIVE=${env.ACTIVE_PROFILE} \
+                                -e EUREKA_INSTANCE_ID=${containerName} \
+                                ${env.FULL_IMAGE_NAME}
 
+                            # 사용하지 않는 이미지 삭제
                             docker image prune -f
                         """
                     }
