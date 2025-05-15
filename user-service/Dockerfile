@@ -2,8 +2,8 @@
 FROM openjdk:17-jdk-slim
 
 # ✅ 빌드 시 전달할 JAR 파일 변수 설정
-ARG COMMON_JAR=common/target/common-start-fixed.jar
-ARG USER_JAR=user-service/target/userservice.jar
+ARG COMMON_JAR=/var/lib/jenkins/workspace/SC_userservice/common/target/common-start-fixed.jar
+ARG USER_JAR=/var/lib/jenkins/workspace/SC_userservice/user-service/target/userservice.jar
 
 # ✅ 공통 모듈 JAR 복사
 COPY ${COMMON_JAR} /app/lib/common-starter.jar
