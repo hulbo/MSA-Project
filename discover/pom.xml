@@ -41,10 +41,6 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<!-- 고정된 JAR 파일 이름 설정 -->
-					<finalName>discoverservice</finalName>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>

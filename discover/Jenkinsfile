@@ -54,16 +54,12 @@ pipeline {
         stage('Build with Maven') {
             steps {
                 sh 'cd discover && mvn clean package -DskipTests'
-                // Maven 빌드 후, target 디렉토리 확인
-                sh 'cd discover && ls -l target'
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 script {
-                    // 현재 디렉토리 확인
-                    sh 'pwd'
                     def result = sh(script: "cd discover && docker build -t ${env.FULL_IMAGE_NAME} .", returnStatus: true)
                     if (result != 0) {
                         error "▶ Docker 이미지 빌드 실패!"
