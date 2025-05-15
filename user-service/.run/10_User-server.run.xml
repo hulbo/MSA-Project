@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="UserServiceApplication" type="Application" factoryName="Application">
+  <configuration default="false" name="10_User-server" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="com.example.userservice.UserserviceApplication" />
     <module name="userservice" />
     <option name="VM_PARAMETERS" value="-Dspring.profiles.active=local" />

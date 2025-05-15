@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Apigateway" type="Application" factoryName="Application">
+  <configuration default="false" name="03_Apigateway-server" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="com.example.apigatewayservice.ApigatewayserviceApplication" />
     <module name="apigatewayservice" />
     <option name="VM_PARAMETERS" value="-Dspring.profiles.active=local" />

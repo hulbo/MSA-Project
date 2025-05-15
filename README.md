@@ -5,6 +5,8 @@
 - **apigate**: API Gateway (Spring Cloud Gateway)
 - **discover**: 서비스 검색 및 등록 (Eureka)
 - **config**: 중앙 설정 관리 (Spring Cloud Config)
+- **common**: 공통으로 사용하는 기능(메이븐서버에 올려서 배포후 사용한다.)
+---
 - **user**: 사용자 관리 서비스
 
 
