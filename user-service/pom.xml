@@ -124,7 +124,7 @@
 		<dependency>
 			<groupId>hulbo</groupId>
 			<artifactId>hulbo-common-library</artifactId>
-			<version>1.0.1</version>
+			<version>1.0.2</version>
 		</dependency>
 
 		<!-- 개별공통으로 생성 -->
