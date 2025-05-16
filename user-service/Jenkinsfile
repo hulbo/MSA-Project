@@ -75,6 +75,21 @@ pipeline {
             }
         }
 
+        stage('Copy Common JAR to User Service') {
+            steps {
+                script {
+                    def commonJarSource = "common/target/common-start-fixed.jar"
+                    def commonJarDest = "user-service/target/common-start-fixed.jar"
+
+                    // 공통 JAR을 user-service 폴더로 복사
+                    sh "cp ${commonJarSource} ${commonJarDest}"
+
+                    // 복사 확인 로그
+                    echo "▶ 공통 모듈 JAR 복사 완료: ${commonJarDest}"
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 script {
