@@ -61,12 +61,15 @@ pipeline {
             }
         }
 
+        /*
+        Maven Multi-Module Common으로 처리시 사용함.
         stage('Build Common Module') {
             steps {
                 // 공통 모듈 빌드 (테스트 제외)
                 sh 'cd common && mvn clean install -DskipTests'
             }
         }
+        */
 
         stage('Build User Service') {
             steps {
@@ -74,23 +77,6 @@ pipeline {
                 sh 'cd user-service && mvn clean package -DskipTests'
             }
         }
-
-        /*
-        stage('Copy Common JAR to User Service') {
-            steps {
-                script {
-                    def commonJarSource = "common/target/common-start-fixed.jar"
-                    def commonJarDest = "user-service/target/common-start-fixed.jar"
-
-                    // 공통 JAR을 user-service 폴더로 복사
-                    sh "cp ${commonJarSource} ${commonJarDest}"
-
-                    // 복사 확인 로그
-                    echo "▶ 공통 모듈 JAR 복사 완료: ${commonJarDest}"
-                }
-            }
-        }
-        */
 
         stage('Build Docker Image') {
             steps {

@@ -4,7 +4,7 @@ package com.example.userservice.filter;
 
 import com.example.userservice.dto.UserDto;
 import com.example.userservice.service.UserService;
-import hulbo.msa.common.util.ResponseUtil;
+import hulbo.common.util.ResponseUtil;
 import com.example.userservice.vo.RequestLogin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
@@ -14,7 +14,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;

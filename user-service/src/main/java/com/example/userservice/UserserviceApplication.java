@@ -10,7 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@Import(hulbo.msa.common.CommonAutoConfiguration.class) // 명시적으로 설정 불러오기
+@Import(hulbo.common.CommonAutoConfiguration.class) // 명시적으로 설정 불러오기
 public class UserserviceApplication {
 
 	public static void main(String[] args) {

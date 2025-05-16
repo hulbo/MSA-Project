@@ -3,33 +3,16 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.4</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<groupId>hulbo.msa</groupId>
+		<artifactId>MSA-Project</artifactId>
+		<version>1.0.0</version>
 	</parent>
-	<groupId>com.example</groupId>
-	<artifactId>userservice</artifactId>
+
+	<artifactId>user-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>userservice</name>
-	<description>Demo project for Spring Boot</description>
-	<url/>
-	<licenses>
-		<license/>
-	</licenses>
-	<developers>
-		<developer/>
-	</developers>
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
-	<properties>
-		<java.version>17</java.version>
-		<spring-cloud.version>2024.0.1</spring-cloud.version>
-	</properties>
+	<name>user-service</name>
+	<description>사용자 관리 서비스</description>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -138,12 +121,20 @@
 			<artifactId>spring-cloud-starter-bus-amqp</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>hulbo</groupId>
+			<artifactId>hulbo-common-library</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+
 		<!-- 개별공통으로 생성 -->
+		<!-- Maven Multi-Module Common으로 처리시 사용함.
 		<dependency>
 			<groupId>hulbo.msa</groupId>
 			<artifactId>common-start</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+		-->
 
 	</dependencies>
 	<dependencyManagement>
