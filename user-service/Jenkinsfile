@@ -75,6 +75,7 @@ pipeline {
             }
         }
 
+        /*
         stage('Copy Common JAR to User Service') {
             steps {
                 script {
@@ -89,6 +90,7 @@ pipeline {
                 }
             }
         }
+        */
 
         stage('Build Docker Image') {
             steps {
