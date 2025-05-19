@@ -6,6 +6,7 @@ import com.example.userservice.service.UserService;
 import hulbo.common.util.ResponseUtil;
 import com.example.userservice.vo.RequestUser;
 import com.example.userservice.vo.ResponseUser;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import jakarta.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/")
 public class UserController {
@@ -58,7 +60,10 @@ public class UserController {
     }
 
     @GetMapping("/users/{userId}")
-    public ResponseEntity<ResponseUser> getUser(@PathVariable String userId){
+    public ResponseEntity<ResponseUser> getUser(@PathVariable("userId") String userId){
+
+        log.debug("#조회대상 ID: " + userId);
+
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         UserDto userDto = userService.getUserByUserId(userId);
