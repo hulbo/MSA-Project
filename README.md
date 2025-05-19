@@ -7,7 +7,7 @@
 - **config**: 
   - 중앙 설정 관리 (Spring Cloud Config)
   - yml파일은 github에 private로 저장되어 있다.
-- **common**: 
+- **common**: (github의 package로 분리함)
   - 공통으로 사용하는 기능 
   - 다른서비스에서 참조하여 사용함
 ---
