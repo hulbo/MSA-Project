@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="20_Order-server" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="com.example.orderservice.OrderserviceApplication" />
+    <module name="orderservice" />
+    <option name="VM_PARAMETERS" value="-Dspring.profiles.active=local -Dserver.port=9090" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

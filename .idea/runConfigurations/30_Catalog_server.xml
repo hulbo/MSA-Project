@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="30_Catalog-server" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="com.example.catalogs.CatalogsApplication" />
+    <module name="catalogs" />
+    <option name="VM_PARAMETERS" value="-Dspring.profiles.active=local -Dserver.port=7070" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

@@ -26,10 +26,12 @@
 
     <modules>
         <!--<module>common</module>-->
-        <module>user-service</module>
         <module>config</module>
         <module>discover</module>
         <module>apigateway</module>
+        <module>user-service</module>
+        <module>order-service</module>
+        <module>catalog-service</module>
     </modules>
 
     <dependencyManagement>
