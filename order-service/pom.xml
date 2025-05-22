@@ -19,12 +19,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
 		</dependency>
-		<!-- Oracle JDBC Driver -->
-		<dependency>
-			<groupId>com.oracle.database.jdbc</groupId>
-			<artifactId>ojdbc8</artifactId>
-			<version>19.9.0.0</version>
-		</dependency>
 		<!-- HikariCP for Connection Pooling -->
 		<dependency>
 			<groupId>com.zaxxer</groupId>
@@ -96,6 +90,14 @@
 			<artifactId>hulbo-common-library</artifactId>
 			<version>1.1.1</version>
 		</dependency>
+
+		<!-- MariaDB JDBC Driver -->
+		<dependency>
+			<groupId>org.mariadb.jdbc</groupId>
+			<artifactId>mariadb-java-client</artifactId>
+			<version>3.2.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<dependencyManagement>
