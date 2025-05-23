@@ -1,12 +1,19 @@
 version: "2"
+networks:
+  kafka_default:
+    external: true
 services:
   zookeeper:
+    networks:
+      - kafka_default
     image: wurstmeister/zookeeper
     container_name: zookeeper
     ports:
       - "2181:2181"
 
   kafka:
+    networks:
+      - kafka_default
     image: wurstmeister/kafka
     container_name: kafka
     ports:
@@ -19,12 +26,17 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   kafka-connect:
+    networks:
+      - kafka_default
+    restart: always
     image: confluentinc/cp-kafka-connect:latest
     container_name: kafka-connect
     depends_on:
       - kafka
     environment:
-      CONNECT_BOOTSTRAP_SERVERS: 'kafka:9092'
+      CONNECT_BOOTSTRAP_SERVERS: 'localhost:9092'
+      CONNECT_RETRY_BACKOFF_MS: "5000"
+      CONNECT_REQUEST_TIMEOUT_MS: "20000"
       CONNECT_REST_PORT: 8083
       CONNECT_GROUP_ID: "connect-cluster"
       CONNECT_CONFIG_STORAGE_TOPIC: "connect-configs"
