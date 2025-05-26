@@ -1,7 +1,9 @@
 version: "2"
+
 networks:
   kafka_default:
     external: true
+
 services:
   zookeeper:
     networks:
@@ -21,7 +23,7 @@ services:
     environment:
       KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true" # Kafka가 자동으로 토픽 생성
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
@@ -35,8 +37,6 @@ services:
       - kafka
     environment:
       CONNECT_BOOTSTRAP_SERVERS: 'localhost:9092'
-      CONNECT_RETRY_BACKOFF_MS: "5000"
-      CONNECT_REQUEST_TIMEOUT_MS: "20000"
       CONNECT_REST_PORT: 8083
       CONNECT_GROUP_ID: "connect-cluster"
       CONNECT_CONFIG_STORAGE_TOPIC: "connect-configs"
@@ -48,8 +48,12 @@ services:
       CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
       CONNECT_PLUGIN_PATH: "/usr/share/java,/etc/kafka-connect/jars"
       CONNECT_REST_ADVERTISED_HOST_NAME: "localhost"
+      CONNECT_RETRY_BACKOFF_MS: "5000" # 초기 연결 재시도 설정
+      CONNECT_REQUEST_TIMEOUT_MS: "20000" # 요청 타임아웃 설정
+      CONNECT_LOG_LEVEL: "INFO" # 로깅 레벨 설정
     volumes:
       - ./jars:/etc/kafka-connect/jars
+      - ./drivers:/etc/kafka-connect/drivers  # JDBC 드라이버 폴더 추가
     ports:
       - "8083:8083"
 
@@ -61,9 +65,19 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     command: |
       "
-      kafka-topics.sh --create --topic user-events --bootstrap-server kafka:9092 --partitions 3 --replication-factor 2 --replica-assignment 0:1,1:2,2:0;
-      kafka-topics.sh --create --topic transaction-events --bootstrap-server kafka:9092 --partitions 3 --replication-factor 2 --replica-assignment 0:1,1:2,2:0;
-      kafka-topics.sh --create --topic logs-events --bootstrap-server kafka:9092 --partitions 2 --replication-factor 2 --replica-assignment 0:1,1:2;
+      kafka-topics.sh --create --topic db-records --bootstrap-server kafka:9092 --partitions 3 --replication-factor 2 --replica-assignment 0:1,1:2,2:0;
+      "
+
+  kafka-connect-init:
+    image: curlimages/curl
+    container_name: kafka-connect-init
+    depends_on:
+      - kafka-connect
+    entrypoint: ["/bin/sh", "-c"]
+    command: |
+      "
+      sleep 10;
+      curl -X POST -H 'Content-Type: application/json' --data @/config/jdbc-sink.json http://kafka-connect:8083/connectors;
       "
 
 volumes:
