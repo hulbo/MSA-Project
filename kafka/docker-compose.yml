@@ -1,42 +1,49 @@
-version: "2"
-
 networks:
   kafka_default:
-    external: true
+    driver: bridge
 
 services:
   zookeeper:
-    networks:
-      - kafka_default
     image: wurstmeister/zookeeper
     container_name: zookeeper
+    networks:
+      - kafka_default
     ports:
       - "2181:2181"
 
   kafka:
-    networks:
-      - kafka_default
     image: wurstmeister/kafka
     container_name: kafka
+    networks:
+      - kafka_default
     ports:
       - "9092:9092"
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
+      KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true" # Kafka가 자동으로 토픽 생성
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
   kafka-connect:
-    networks:
-      - kafka_default
-    restart: always
     image: confluentinc/cp-kafka-connect:latest
     container_name: kafka-connect
+    networks:
+      - kafka_default
     depends_on:
       - kafka
+    ports:
+      - "8083:8083"
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8083"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     environment:
-      CONNECT_BOOTSTRAP_SERVERS: 'localhost:9092'
+      CONNECT_BOOTSTRAP_SERVERS: 'kafka:9092'
       CONNECT_REST_PORT: 8083
       CONNECT_GROUP_ID: "connect-cluster"
       CONNECT_CONFIG_STORAGE_TOPIC: "connect-configs"
@@ -46,38 +53,51 @@ services:
       CONNECT_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
       CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE: "false"
       CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
-      CONNECT_PLUGIN_PATH: "/usr/share/java,/etc/kafka-connect/jars"
-      CONNECT_REST_ADVERTISED_HOST_NAME: "localhost"
-      CONNECT_RETRY_BACKOFF_MS: "5000" # 초기 연결 재시도 설정
-      CONNECT_REQUEST_TIMEOUT_MS: "20000" # 요청 타임아웃 설정
-      CONNECT_LOG_LEVEL: "INFO" # 로깅 레벨 설정
+      CONNECT_PLUGIN_PATH: "/etc/kafka-connect/plugins"
+      CONNECT_REST_ADVERTISED_HOST_NAME: "kafka-connect"
+      CONNECT_RETRY_BACKOFF_MS: "5000"
+      CONNECT_REQUEST_TIMEOUT_MS: "20000"
+      CONNECT_LOG_LEVEL: "INFO"
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
+      # DB 연결정보를 환경변수로 넘김 (docker-compose 실행 시 OS 환경변수 필요)
+      DB_URL: ${OCI_MARIA_DB_URL}
+      DB_USER: ${OCI_MARIA_DB_USER}
+      DB_PASSWORD: ${OCI_MARIA_DB_PASSWORD}
     volumes:
-      - ./jars:/etc/kafka-connect/jars
-      - ./drivers:/etc/kafka-connect/drivers  # JDBC 드라이버 폴더 추가
-    ports:
-      - "8083:8083"
+      - ./kafka-connectors/jdbc:/etc/kafka-connect/plugins/jdbc
 
   kafka-init:
     image: wurstmeister/kafka
     container_name: kafka-init
+    networks:
+      - kafka_default
     depends_on:
       - kafka
     entrypoint: ["/bin/sh", "-c"]
     command: |
       "
-      kafka-topics.sh --create --topic db-records --bootstrap-server kafka:9092 --partitions 3 --replication-factor 2 --replica-assignment 0:1,1:2,2:0;
+      # kafka가 완전히 올라오도록 잠시 대기 후 토픽 생성
+      sleep 10;
+      kafka-topics.sh --create --topic t_sc_orders --bootstrap-server kafka:9092 --partitions 3 --replication-factor 1;
       "
 
   kafka-connect-init:
     image: curlimages/curl
     container_name: kafka-connect-init
+    networks:
+      - kafka_default
     depends_on:
-      - kafka-connect
+      kafka-connect:
+        condition: service_healthy
+    volumes:
+      - ./config:/config
     entrypoint: ["/bin/sh", "-c"]
     command: |
       "
-      sleep 10;
-      curl -X POST -H 'Content-Type: application/json' --data @/config/jdbc-sink.json http://kafka-connect:8083/connectors;
+      sleep 15;
+      curl -X POST -H \"Content-Type: application/json\" --data @/config/jdbc-sink.json http://kafka-connect:8083/connectors;
       "
 
 volumes:
