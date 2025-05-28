@@ -28,7 +28,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   kafka-connect:
-    image: confluentinc/cp-kafka-connect:latest
+    image: confluentinc/cp-kafka-connect:7.6.1
     container_name: kafka-connect
     networks:
       - kafka_default
@@ -53,7 +53,7 @@ services:
       CONNECT_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
       CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE: "false"
       CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
-      CONNECT_PLUGIN_PATH: "/etc/kafka-connect/plugins"
+      CONNECT_PLUGIN_PATH: "/usr/share/java,/etc/kafka-connect/plugins,/usr/share/confluent-hub-components"
       CONNECT_REST_ADVERTISED_HOST_NAME: "kafka-connect"
       CONNECT_RETRY_BACKOFF_MS: "5000"
       CONNECT_REQUEST_TIMEOUT_MS: "20000"
@@ -65,11 +65,15 @@ services:
       errors.retry.delay: "5000"
       errors.deadletterqueue.topic.name: "failed-records"
       # DB 연결정보를 환경변수로 넘김 (docker-compose 실행 시 OS 환경변수 필요)
+      CONNECT_CONFIG_PROVIDERS: env
+      CONNECT_CONFIG_PROVIDERS_ENV_CLASS: org.apache.kafka.common.config.provider.EnvVarConfigProvider
+      CONNECT_FILE_CONFIG_PATH: "/etc/kafka-connect/configs/secrets.properties"  # 설정파일
       DB_URL: ${OCI_MARIA_DB_URL}
       DB_USER: ${OCI_MARIA_DB_USER}
       DB_PASSWORD: ${OCI_MARIA_DB_PASSWORD}
     volumes:
       - ./kafka-connectors/jdbc:/etc/kafka-connect/plugins/jdbc
+      - ./config:/etc/kafka-connect/configs
 
   kafka-init:
     image: wurstmeister/kafka
@@ -83,7 +87,12 @@ services:
       "
       # kafka가 완전히 올라오도록 잠시 대기 후 토픽 생성
       sleep 10;
-      kafka-topics.sh --create --topic t_sc_orders --bootstrap-server kafka:9092 --partitions 3 --replication-factor 1;
+      
+      # 메시지를 60초 동안만 유지하고 자동 삭제
+      # 메시지를 소비한 후 즉시 삭제 (큐처럼 동작)
+      # 로그 파일 크기를 1MB로 설정하여 삭제 속도 최적화
+      kafka-topics.sh --create --topic t_sc_orders --bootstrap-server kafka:9092 --partitions 3 --replication-factor 1
+      --config retention.ms=600000 --config log.segment.bytes=50000000  
       "
 
   kafka-connect-init:
@@ -100,7 +109,7 @@ services:
     command: |
       "
       sleep 15;
-      curl -X POST -H \"Content-Type: application/json\" --data @/config/jdbc-sink.json http://kafka-connect:8083/connectors;
+      curl -X POST -H \"Content-Type: application/json\" --data @/config/jdbc-sink-orders.json http://kafka-connect:8083/connectors;
       "
 
 volumes:

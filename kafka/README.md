@@ -73,7 +73,7 @@ curl -X GET http://localhost:8083/connector-plugins
 
 -- connect 설정확인
 curl -X GET http://localhost:8083/connectors
-curl -X GET http://localhost:8083/connectors/jdbc-sink/status
+curl -X GET http://localhost:8083/connectors/jdbc-sink-orders/status
 
 -- 토픽생성 확인
 docker exec kafka kafka-topics.sh --bootstrap-server kafka:9092 --list
