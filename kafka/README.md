@@ -52,6 +52,9 @@ Kafka 메시지를 자동으로 **DB, Elasticsearch, Hadoop 등 다양한 저장
 OCI_MARIA_DB_URL=jdbc:mariadb://IP:3306/dbname
 OCI_MARIA_DB_USER=id
 OCI_MARIA_DB_PASSWORD=password
+OCI_ORACLE_DB_URL=jdbc:oracle:thin:@IP:1521:SID
+OCI_ORACLE_DB_ID=id
+OCI_ORACLE_DB_PASSWORD=password
 ```
 ### ** Docker Compose를 사용하여 Kafka 실행**
 ```shell
