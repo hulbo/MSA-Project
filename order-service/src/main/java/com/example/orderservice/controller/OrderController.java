@@ -2,6 +2,7 @@ package com.example.orderservice.controller;
 
 import com.example.orderservice.dto.OrderDto;
 import com.example.orderservice.jpa.OrderEntity;
+import com.example.orderservice.messagequeue.KafkaProducer;
 import com.example.orderservice.service.OrderService;
 import com.example.orderservice.vo.RequestOrder;
 import com.example.orderservice.vo.ResponseOrder;
@@ -9,6 +10,7 @@ import hulbo.common.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +26,14 @@ import java.util.Map;
 @Slf4j
 public class OrderController {
     OrderService orderService;
+    KafkaProducer kafkaProducer;
+    Environment env;
 
-    public OrderController(OrderService orderService) {
+    @Autowired
+    public OrderController(OrderService orderService, KafkaProducer kafkaProducer, Environment env) {
         this.orderService = orderService;
+        this.kafkaProducer = kafkaProducer;
+        this.env = env;
     }
 
     @PostMapping("/{userId}/orders")
@@ -36,11 +43,14 @@ public class OrderController {
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
+        /* JPA */
         OrderDto orderDto = mapper.map(orderDetails, OrderDto.class);
         orderDto.setUserId(userId);
-        /* jpa */
         OrderDto createdOrder = orderService.createOrder(orderDto);
         ResponseOrder responseOrder = mapper.map(createdOrder, ResponseOrder.class);
+
+        /* 카푸카로 주문정보 전송 */
+        kafkaProducer.send(env.getProperty("kafka.catalog.topic"), orderDto);
 
         log.info("After added orders data");
         return ResponseUtil.CUSTOM(responseOrder, HttpStatus.CREATED);

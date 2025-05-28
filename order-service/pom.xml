@@ -98,6 +98,11 @@
 			<version>3.2.0</version>
 		</dependency>
 
+		<!-- Spring Kafka -->
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>

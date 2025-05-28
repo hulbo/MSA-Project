@@ -21,8 +21,13 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      # --- 이 부분이 중요합니다 ---
+      # KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      # KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,INTERNAL://0.0.0.0:29092 # 컨테이너 내부 리스너 정의 (EXTERNAL은 명시적으로 PLAINTEXT로)
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,INTERNAL://kafka:29092 # 외부 광고 주소와 내부 광고 주소
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,INTERNAL:PLAINTEXT # 리스너별 보안 프로토콜
+      # --- 여기까지 변경 ---
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -43,7 +48,8 @@ services:
       timeout: 5s
       retries: 5
     environment:
-      CONNECT_BOOTSTRAP_SERVERS: 'kafka:9092'
+      #CONNECT_BOOTSTRAP_SERVERS: 'kafka:9092'
+      CONNECT_BOOTSTRAP_SERVERS: 'kafka:29092' # 내부 통신용 주소 (INTERNAL 리스너)
       CONNECT_REST_PORT: 8083
       CONNECT_GROUP_ID: "connect-cluster"
       CONNECT_CONFIG_STORAGE_TOPIC: "connect-configs"
@@ -95,11 +101,9 @@ services:
       # 메시지를 소비한 후 즉시 삭제 (큐처럼 동작)
       # 로그 파일 크기를 1MB로 설정하여 삭제 속도 최적화
       # 't_sc_orders' 토픽 생성 쓰기
-      kafka-topics.sh --create --topic write_topic_maria_t_sc_orders --bootstrap-server kafka:9092 --partitions 3 --replication-factor 1
-      # 't_sc_orders' 토픽 생성 조회
-      # kafka-topics.sh --create --topic view_topic_maria_t_sc_orders --bootstrap-server kafka:9092 --partitions 3 --replication-factor 1
-      # 't_sc_users' 토픽 생성 조회
-      # kafka-topics.sh --create --topic view_topic_oracle_t_sc_users --bootstrap-server kafka:9092 --partitions 3 --replication-factor 1
+      # kafka-topics.sh --create --topic write_topic_maria_t_sc_orders --bootstrap-server kafka:9092 --partitions 3 --replication-factor 1
+      # 내부포트로 변경
+      kafka-topics.sh --create --topic write_topic_maria_t_sc_orders --bootstrap-server kafka:29092 --partitions 3 --replication-factor 1
       "
 
   kafka-connect-init:
