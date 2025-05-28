@@ -9,10 +9,12 @@
   - yml파일은 github에 private로 저장되어 있다.
 - **common**: (github의 package로 분리함)
   - 공통으로 사용하는 기능 
-  - 다른서비스에서 참조하여 사용함
+  - 다른서비스에서 참조하여 사용하기 위하여 만들
+  - 사용안함
+- **kafka**: 도커 이용 카푸카 설정
 ---
 - **user**: 사용자 관리 서비스
-- **kafka**: 도커 이용 카푸카 설정
+
 
 ## 🔧 기술 스택
 - **Back-End**: Spring Boot, Spring Cloud
