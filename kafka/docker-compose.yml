@@ -68,9 +68,12 @@ services:
       CONNECT_CONFIG_PROVIDERS: env
       CONNECT_CONFIG_PROVIDERS_ENV_CLASS: org.apache.kafka.common.config.provider.EnvVarConfigProvider
       CONNECT_FILE_CONFIG_PATH: "/etc/kafka-connect/configs/secrets.properties"  # 설정파일
-      DB_URL: ${OCI_MARIA_DB_URL}
-      DB_USER: ${OCI_MARIA_DB_USER}
-      DB_PASSWORD: ${OCI_MARIA_DB_PASSWORD}
+      MARIA_DB_URL: ${OCI_MARIA_DB_URL}
+      MARIA_DB_USER: ${OCI_MARIA_DB_USER}
+      MARIA_DB_PASSWORD: ${OCI_MARIA_DB_PASSWORD}
+      ORACLE_DB_URL: ${OCI_ORACLE_DB_URL}
+      ORACLE_DB_USER: ${OCI_ORACLE_DB_ID}
+      ORACLE_DB_PASSWORD: ${OCI_ORACLE_DB_PASSWORD}
     volumes:
       - ./kafka-connectors/jdbc:/etc/kafka-connect/plugins/jdbc
       - ./config:/etc/kafka-connect/configs
@@ -91,8 +94,12 @@ services:
       # 메시지를 60초 동안만 유지하고 자동 삭제
       # 메시지를 소비한 후 즉시 삭제 (큐처럼 동작)
       # 로그 파일 크기를 1MB로 설정하여 삭제 속도 최적화
-      kafka-topics.sh --create --topic t_sc_orders --bootstrap-server kafka:9092 --partitions 3 --replication-factor 1
-      --config retention.ms=600000 --config log.segment.bytes=50000000  
+      # 't_sc_orders' 토픽 생성 쓰기
+      kafka-topics.sh --create --topic write_topic_maria_t_sc_orders --bootstrap-server kafka:9092 --partitions 3 --replication-factor 1
+      # 't_sc_orders' 토픽 생성 조회
+      # kafka-topics.sh --create --topic view_topic_maria_t_sc_orders --bootstrap-server kafka:9092 --partitions 3 --replication-factor 1
+      # 't_sc_users' 토픽 생성 조회
+      # kafka-topics.sh --create --topic view_topic_oracle_t_sc_users --bootstrap-server kafka:9092 --partitions 3 --replication-factor 1
       "
 
   kafka-connect-init:
@@ -109,9 +116,10 @@ services:
 
     command: |
       "
-      sleep 15;
+      sleep 10;
       curl -X POST -H \"Content-Type: application/json\" --data @/config/jdbc-sink-orders.json http://kafka-connect:8083/connectors;
       curl -X POST -H \"Content-Type: application/json\" --data @/config/jdbc-connectors-orders.json http://kafka-connect:8083/connectors;
+      curl -X POST -H \"Content-Type: application/json\" --data @/config/jdbc-connectors-users.json http://kafka-connect:8083/connectors;
       "
 
 volumes:

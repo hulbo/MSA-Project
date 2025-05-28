@@ -1,0 +1,14 @@
+{
+  "name": "jdbc-connect-users",
+  "config": {
+    "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
+    "connection.url": "${env:ORACLE_DB_URL}",
+    "connection.user": "${env:ORACLE_DB_USER}",
+    "connection.password": "${env:ORACLE_DB_PASSWORD}",
+    "mode": "incrementing",
+    "incrementing.column.name": "ID",
+    "table.whitelist": "LHMTECH.T_SC_USERS",
+    "topic.prefix": "VIEW_TOPIC_ORACLE_",
+    "tasks.max": "2"
+  }
+}

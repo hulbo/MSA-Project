@@ -80,8 +80,10 @@ docker exec kafka kafka-topics.sh --bootstrap-server kafka:9092 --list
 
 -- 데이터 입력 테스트
 docker exec -it kafka /bin/sh
-kafka-console-producer.sh --broker-list kafka:9092 --topic t_sc_orders
-{"schema":{"type":"struct","fields":[{"field":"created_at","type":"string"},{"field":"order_id","type":"string"},{"field":"product_id","type":"string"},{"field":"qty","type":"int32"},{"field":"total_price","type":"double"},{"field":"unit_price","type":"double"},{"field":"user_id","type":"string"}],"optional":false,"name":"Order"},"payload":{"created_at":"2025-05-26T10:30:00","order_id":"ORD1234","product_id":"P001","qty":3,"total_price":450.00,"unit_price":150.00,"user_id":"user01"}}
+kafka-console-producer.sh --broker-list kafka:9092 --topic write_topic_maria_t_sc_orders
+{"schema":{"type":"struct","fields":[{"field":"created_at","type":"string"},{"field":"order_id","type":"string"},{"field":"product_id","type":"string"},{"field":"qty","type":"int32"},{"field":"total_price","type":"double"},{"field":"unit_price","type":"double"},{"field":"user_id","type":"string"}],"optional":false,"name":"Order"},"payload":{"created_at":"2025-05-26T10:30:00","order_id":"ORD2051","product_id":"P005","qty":3,"total_price":3450.00,"unit_price":150.00,"user_id":"user01"}}
+{"schema":{"type":"struct","fields":[{"field":"created_at","type":"string"},{"field":"order_id","type":"string"},{"field":"product_id","type":"string"},{"field":"qty","type":"int32"},{"field":"total_price","type":"double"},{"field":"unit_price","type":"double"},{"field":"user_id","type":"string"}],"optional":false,"name":"Order"},"payload":{"created_at":"2025-05-26T10:30:00","order_id":"ORD2052","product_id":"P005","qty":3,"total_price":3450.00,"unit_price":150.00,"user_id":"user01"}}
+{"schema":{"type":"struct","fields":[{"field":"created_at","type":"string"},{"field":"order_id","type":"string"},{"field":"product_id","type":"string"},{"field":"qty","type":"int32"},{"field":"total_price","type":"double"},{"field":"unit_price","type":"double"},{"field":"user_id","type":"string"}],"optional":false,"name":"Order"},"payload":{"created_at":"2025-05-26T10:30:00","order_id":"ORD2053","product_id":"P005","qty":3,"total_price":3450.00,"unit_price":150.00,"user_id":"user01"}}
 
 ```
 
@@ -90,7 +92,9 @@ kafka-console-producer.sh --broker-list kafka:9092 --topic t_sc_orders
 -- 1. 현재 존재하는 토픽 목록 조회
 docker exec -it kafka kafka-topics.sh --bootstrap-server localhost:9092 --list
 -- 2. 특정 토픽 정보 조회
-docker exec -it kafka kafka-topics.sh --bootstrap-server localhost:9092 --describe --topic view_topic_t_sc_orders
+docker exec -it kafka kafka-topics.sh --bootstrap-server localhost:9092 --describe --topic view_topic_maria_t_sc_orders
+docker exec -it kafka kafka-topics.sh --bootstrap-server localhost:9092 --describe --topic VIEW_TOPIC_ORACLE_T_SC_USERS
 -- 3. 토픽 내 메시지 조회
-docker exec -it kafka kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic view_topic_t_sc_orders --from-beginning
+docker exec -it kafka kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic view_topic_maria_t_sc_orders --from-beginning
+docker exec -it kafka kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic VIEW_TOPIC_ORACLE_T_SC_USERS --from-beginning
 ```
