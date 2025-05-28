@@ -12,6 +12,7 @@
   - 다른서비스에서 참조하여 사용함
 ---
 - **user**: 사용자 관리 서비스
+- **kafka**: 도커 이용 카푸카 설정
 
 ## 🔧 기술 스택
 - **Back-End**: Spring Boot, Spring Cloud
