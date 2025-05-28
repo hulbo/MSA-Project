@@ -111,6 +111,7 @@ services:
       "
       sleep 15;
       curl -X POST -H \"Content-Type: application/json\" --data @/config/jdbc-sink-orders.json http://kafka-connect:8083/connectors;
+      curl -X POST -H \"Content-Type: application/json\" --data @/config/jdbc-connectors-orders.json http://kafka-connect:8083/connectors;
       "
 
 volumes:

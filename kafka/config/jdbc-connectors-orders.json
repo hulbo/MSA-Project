@@ -1,0 +1,14 @@
+{
+  "name": "jdbc-connect-orders",
+  "config": {
+    "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
+    "connection.url": "${env:DB_URL}",
+    "connection.user": "${env:DB_USER}",
+    "connection.password": "${env:DB_PASSWORD}",
+    "mode": "incrementing",
+    "incrementing.column.name": "id",
+    "table.whitelist": "t_sc_orders",
+    "topic.prefix": "view_topic_",
+    "tasks.max": "2"
+  }
+}
