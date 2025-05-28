@@ -1,5 +1,5 @@
 {
-  "name": "jdbc-sink",
+  "name": "jdbc-sink-orders",
   "config": {
     "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
     "_comment_connection": "데이터베이스 연결 정보 (환경 변수 사용)",
@@ -17,7 +17,7 @@
     "_comment_pk_mode": "기본 키 설정 방식 ('record_value': 메시지 값에서 PK를 가져옴)",
     "pk.mode": "record_value",
     "_comment_pk_fields": "기본 키로 사용할 필드 (여러 개 가능)",
-    "pk.fields": "order_id",
+    "pk.fields": "order_id, product_id",
     "_comment_delete_enabled": "데이터 삭제 활성화 여부 (record_key만 사용 가능)",
     "delete.enabled": "false",
     "_comment_key_converter": "Kafka 메시지의 키 변환 방식",
