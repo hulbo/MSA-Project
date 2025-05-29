@@ -33,7 +33,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   kafka-connect:
-    image: confluentinc/cp-kafka-connect:7.6.1
+    image: confluentinc/cp-kafka-connect:latest
     container_name: kafka-connect
     networks:
       - kafka_default
