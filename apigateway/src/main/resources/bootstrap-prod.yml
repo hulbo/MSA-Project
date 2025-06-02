@@ -2,5 +2,5 @@ spring:
   cloud:
     config:
       uri: http://${OCI_SERVICE_PRIVATE}:8888
-      name: common, rabbit
+      name: common, rabbit, zipkin
       active: prod

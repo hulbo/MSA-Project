@@ -133,6 +133,26 @@
 			<version>1.1.1</version>
 		</dependency>
 
+		<!-- 서킷브레이커: 마이크로서비스간 장애발생 처리 -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
+		</dependency>
+
+		<!-- zipkin 서버와 연결하여 마이크로 서비스 추적 -->
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-observation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-tracing-bridge-brave</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.zipkin.reporter2</groupId>
+			<artifactId>zipkin-reporter-brave</artifactId>
+		</dependency>
+
 		<!-- 개별공통으로 생성 -->
 		<!-- Maven Multi-Module Common으로 처리시 사용함.
 		<dependency>

@@ -126,5 +126,17 @@ services:
       curl -X POST -H \"Content-Type: application/json\" --data @/config/jdbc-connectors-users.json http://kafka-connect:8083/connectors;
       "
 
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    networks:
+      - kafka_default
+    ports:
+      - "9411:9411"
+    environment:
+      - STORAGE_TYPE=mem # 기본적으로 메모리 저장소 사용
+    depends_on:
+      - kafka # Kafka가 먼저 실행된 후 Zipkin 실행
+
 volumes:
   kafka_data:

@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,15 +34,17 @@ public class UserServiceImpl implements UserService {
     Environment env;
     RestTemplate restTemplate;
     OrderServiceClient orderServiceClient;
+    CircuitBreakerFactory circuitBreakerFactory;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, Environment env, RestTemplate restTemplate
-                            , OrderServiceClient orderServiceClient) {
+                            , OrderServiceClient orderServiceClient, CircuitBreakerFactory circuitBreakerFactory) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.env = env;
         this.restTemplate = restTemplate;
         this.orderServiceClient = orderServiceClient;
+        this.circuitBreakerFactory = circuitBreakerFactory;
     }
 
     @Override
@@ -88,7 +92,15 @@ public class UserServiceImpl implements UserService {
         */
         
         // ErrorDeocde 방식
-        List<ResponseOrder> ordersList = orderServiceClient.getOrders(userId);
+        // 단순조회 -> 서키브레이커 사용으로 변경
+        // List<ResponseOrder> ordersList = orderServiceClient.getOrders(userId);
+
+        // 서키브레이커를 사용하여서 문제가 발생시 new ArrayList<>() 반환함
+        log.info("Order Server 호출 전");
+        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
+        List<ResponseOrder> ordersList = circuitBreaker.run(() -> orderServiceClient.getOrders(userId), throwable -> new ArrayList<>());
+        log.info("Order Server 호출 후");
+        
         userDto.setOrders(ordersList);
         return userDto;
     }

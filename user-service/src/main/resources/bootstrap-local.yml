@@ -2,5 +2,5 @@ spring:
   cloud:
     config:
       uri: http://localhost:8888
-      name: common, oracle, rabbit
+      name: common, oracle, rabbit, zipkin
       active: local

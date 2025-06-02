@@ -2,5 +2,5 @@ spring:
   cloud:
     config:
       uri: http://localhost:8888
-      name: common, maria, rabbit, kafka
+      name: common, maria, rabbit, kafka, zipkin
       active: local

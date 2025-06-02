@@ -40,7 +40,7 @@ public class OrderController {
     @PostMapping("/{userId}/orders")
     public ResponseEntity<ResponseOrder> createOrder(@PathVariable("userId") String userId,
                                                      @RequestBody RequestOrder orderDetails) {
-        log.info("Before add orders data");
+        log.info("orders data 생성 전");
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
@@ -62,20 +62,20 @@ public class OrderController {
         orderProducer.send("write_topic_maria_t_sc_orders", orderDto);
 
         ResponseOrder responseOrder = mapper.map(orderDto, ResponseOrder.class);
-        log.info("After added orders data");
+        log.info("orders data 생성 후");
         return ResponseUtil.CUSTOM(responseOrder, HttpStatus.CREATED);
     }
 
     @GetMapping("/{userId}/orders")
     public ResponseEntity<List<ResponseOrder>> getOrder(@PathVariable("userId") String userId) throws Exception {
-        log.info("Before retrieve orders data");
+        log.info("orders data 조회 전");
         Iterable<OrderEntity> orderList = orderService.getOrdersByUserId(userId);
 
         List<ResponseOrder> result = new ArrayList<>();
         orderList.forEach(f -> {
             result.add(new ModelMapper().map(f, ResponseOrder.class));
         });
-        log.info("Add retrieved orders data");
+        log.info("orders data 조회 후");
 
         return ResponseUtil.OK(result);
     }

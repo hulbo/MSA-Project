@@ -3,9 +3,11 @@ package com.example.apigatewayservice;
 import org.springframework.boot.actuate.web.exchanges.InMemoryHttpExchangeRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
+@EnableFeignClients // Feign Client 활성화 및 트레이싱 자동 적용
 public class ApigatewayserviceApplication {
 
 	public static void main(String[] args) {
