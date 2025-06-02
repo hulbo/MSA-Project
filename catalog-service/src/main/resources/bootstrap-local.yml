@@ -1,6 +1,6 @@
 spring:
   cloud:
     config:
-      uri: http://${OCI_SERVICE_PRIVATE}:8888
+      uri: http://localhost:8888
       name: common, oracle, rabbit, kafka
       active: local

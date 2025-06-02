@@ -3,6 +3,7 @@ package com.example.orderservice.controller;
 import com.example.orderservice.dto.OrderDto;
 import com.example.orderservice.jpa.OrderEntity;
 import com.example.orderservice.messagequeue.KafkaProducer;
+import com.example.orderservice.messagequeue.OrderProducer;
 import com.example.orderservice.service.OrderService;
 import com.example.orderservice.vo.RequestOrder;
 import com.example.orderservice.vo.ResponseOrder;
@@ -16,10 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/")
@@ -27,12 +25,15 @@ import java.util.Map;
 public class OrderController {
     OrderService orderService;
     KafkaProducer kafkaProducer;
+    OrderProducer orderProducer;
     Environment env;
 
     @Autowired
-    public OrderController(OrderService orderService, KafkaProducer kafkaProducer, Environment env) {
+    public OrderController(OrderService orderService, KafkaProducer kafkaProducer
+            , Environment env, OrderProducer orderProducer) {
         this.orderService = orderService;
         this.kafkaProducer = kafkaProducer;
+        this.orderProducer = orderProducer;
         this.env = env;
     }
 
@@ -43,15 +44,24 @@ public class OrderController {
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
-        /* JPA */
         OrderDto orderDto = mapper.map(orderDetails, OrderDto.class);
         orderDto.setUserId(userId);
-        OrderDto createdOrder = orderService.createOrder(orderDto);
-        ResponseOrder responseOrder = mapper.map(createdOrder, ResponseOrder.class);
 
-        /* 카푸카로 주문정보 전송 */
+        /* JPA 방식 */
+        /*OrderDto createdOrder = orderService.createOrder(orderDto);
+        ResponseOrder responseOrder = mapper.map(createdOrder, ResponseOrder.class);*/
+
+        /* kafka 방식 */
+        orderDto.setOrderId(UUID.randomUUID().toString());
+        orderDto.setTotalPrice(orderDetails.getQty() * orderDetails.getUnitPrice());
+        
+        /* 카푸카로 주문정보 전송 -> 카탈로그에서 처리진행함 */
         kafkaProducer.send(env.getProperty("kafka.catalog.topic"), orderDto);
 
+        /* 카푸카로 주문정보 정송 -> DB 에 저장됨 */
+        orderProducer.send("write_topic_maria_t_sc_orders", orderDto);
+
+        ResponseOrder responseOrder = mapper.map(orderDto, ResponseOrder.class);
         log.info("After added orders data");
         return ResponseUtil.CUSTOM(responseOrder, HttpStatus.CREATED);
     }

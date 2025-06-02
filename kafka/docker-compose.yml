@@ -48,7 +48,6 @@ services:
       timeout: 5s
       retries: 5
     environment:
-      #CONNECT_BOOTSTRAP_SERVERS: 'kafka:9092'
       CONNECT_BOOTSTRAP_SERVERS: 'kafka:29092' # 내부 통신용 주소 (INTERNAL 리스너)
       CONNECT_REST_PORT: 8083
       CONNECT_GROUP_ID: "connect-cluster"
@@ -58,7 +57,8 @@ services:
       CONNECT_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
       CONNECT_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
       CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE: "false"
-      CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
+      CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "true"  # 변경: 스키마 활성화
+      CONNECT_VALUE_CONVERTER_FORMAT: "timestamp-millis"
       CONNECT_PLUGIN_PATH: "/usr/share/java,/etc/kafka-connect/plugins,/usr/share/confluent-hub-components"
       CONNECT_REST_ADVERTISED_HOST_NAME: "kafka-connect"
       CONNECT_RETRY_BACKOFF_MS: "5000"
