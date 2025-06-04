@@ -130,7 +130,7 @@
 		<dependency>
 			<groupId>hulbo</groupId>
 			<artifactId>hulbo-common-library</artifactId>
-			<version>1.1.1</version>
+			<version>1.1.2</version>
 		</dependency>
 
 		<!-- 서킷브레이커: 마이크로서비스간 장애발생 처리 -->
@@ -151,6 +151,18 @@
 		<dependency>
 			<groupId>io.zipkin.reporter2</groupId>
 			<artifactId>zipkin-reporter-brave</artifactId>
+		</dependency>
+
+		<!-- 모니터링 -->
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>RELEASE</version>
+			<scope>compile</scope>
 		</dependency>
 
 		<!-- 개별공통으로 생성 -->

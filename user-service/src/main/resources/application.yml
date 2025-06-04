@@ -37,9 +37,8 @@ management:
   endpoints:
     web:
       exposure:
-        include: refresh, health, beans, busrefresh #, info, metrics, prometheus
-
-# spring-config-server 에서 가져옴
-#token:
-#  expiration_time: 86400000 # 토큰유지시간: 86400000(하루)
-#  secret: 6vDUdUShZnSNyRNfO656IW80jMjA0TdVLJDEn0z46wU+gewYgsVahmyGgxXWmxff2wwNXxXxxnakaqzgRviVeg== # HS512로 생성해서 사용해야함
+        include: refresh, health, beans, busrefresh, info, metrics, prometheus
+  metrics:
+    export:
+      prometheus:
+        enabled: true

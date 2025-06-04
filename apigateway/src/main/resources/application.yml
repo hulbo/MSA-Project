@@ -46,7 +46,7 @@ spring:
         - id: user-service-routes
           uri: lb://USER-SERVICE
           predicates:
-            - Path=/user-service/actuator
+            - Path=/user-service/actuator/**
             - Method=GET
           filters:
             - RemoveRequestHeader=Cookie
@@ -78,13 +78,12 @@ logging:
   level:
     com.example.apigatewayservice: DEBUG
 
-# spring-config-server 에서 가져옴
-# token:
-#  secret: 6vDUdUShZnSNyRNfO656IW80jMjA0TdVLJDEn0z46wU+gewYgsVahmyGgxXWmxff2wwNXxXxxnakaqzgRviVeg== # HS512로 생성해서 사용해야함
+greeting:
+  message: Welcome to the sample Apigateway Service
 
 # actuator 설정
 management:
   endpoints:
     web:
       exposure:
-        include: refresh, health, beans, httptrace #, busrefresh, info, metrics, prometheus
+        include: refresh, health, beans, httptrace, info, metrics, prometheus

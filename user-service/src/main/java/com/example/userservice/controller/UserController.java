@@ -6,6 +6,7 @@ import com.example.userservice.service.UserService;
 import hulbo.common.util.ResponseUtil;
 import com.example.userservice.vo.RequestUser;
 import com.example.userservice.vo.ResponseUser;
+import io.micrometer.core.annotation.Timed;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -32,6 +33,7 @@ public class UserController {
     }
 
     @PostMapping("/users")
+    @Timed(value="users.createUser")
     public ResponseEntity<ResponseUser> createUser(@Valid @RequestBody RequestUser user){
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
@@ -45,7 +47,8 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<ResponseUser>> getUser() {
+    @Timed(value="users.getUsers")
+    public ResponseEntity<List<ResponseUser>> getUsers() {
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         Iterable<UserEntity> userList = userService.getUserByAll();
@@ -60,6 +63,7 @@ public class UserController {
     }
 
     @GetMapping("/users/{userId}")
+    @Timed(value="users.getUser")
     public ResponseEntity<ResponseUser> getUser(@PathVariable("userId") String userId){
 
         log.debug("#조회대상 ID: " + userId);

@@ -4,6 +4,7 @@ import com.example.catalogs.jpa.CatalogEntity;
 import com.example.catalogs.service.CatalogService;
 import com.example.catalogs.vo.ResponseCatalog;
 import hulbo.common.util.ResponseUtil;
+import io.micrometer.core.annotation.Timed;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,8 @@ public class CatalogController {
     }
 
     @GetMapping("/catalogs")
-    public ResponseEntity<List<ResponseCatalog>> getUser() {
+    @Timed(value="catalog.getCatalogs")
+    public ResponseEntity<List<ResponseCatalog>> getCatalogs() {
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         Iterable<CatalogEntity> catalogsList = catalogService.getAllCatalogs();

@@ -8,6 +8,7 @@ import com.example.orderservice.service.OrderService;
 import com.example.orderservice.vo.RequestOrder;
 import com.example.orderservice.vo.ResponseOrder;
 import hulbo.common.util.ResponseUtil;
+import io.micrometer.core.annotation.Timed;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -38,6 +39,7 @@ public class OrderController {
     }
 
     @PostMapping("/{userId}/orders")
+    @Timed(value="order.createOrder")
     public ResponseEntity<ResponseOrder> createOrder(@PathVariable("userId") String userId,
                                                      @RequestBody RequestOrder orderDetails) {
         log.info("orders data 생성 전");
@@ -67,6 +69,7 @@ public class OrderController {
     }
 
     @GetMapping("/{userId}/orders")
+    @Timed(value="order.userGetOrders")
     public ResponseEntity<List<ResponseOrder>> getOrder(@PathVariable("userId") String userId) throws Exception {
         log.info("orders data 조회 전");
         Iterable<OrderEntity> orderList = orderService.getOrdersByUserId(userId);

@@ -11,7 +11,11 @@
   - 공통으로 사용하는 기능 
   - 다른서비스에서 참조하여 사용하기 위하여 만들
   - 사용안함
-- **kafka**: 도커 이용 카푸카 설정
+- **docker**: 도커정의
+  - kafka
+    - kafka db와 연결및 호출시 insert 처리됨
+  - Prometheus: http://localhost:9090/
+  - Grafana: http://localhost:3000/
 ---
 - **user**: 사용자 관리 서비스
 
