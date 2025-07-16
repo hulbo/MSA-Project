@@ -2,11 +2,13 @@
 이 프로젝트는 MSA 패턴을 연습하기 위해 만든 샘플 프로젝트입니다. Spring Cloud를 기반으로 다양한 서비스들을 구성하였습니다.
 
 ## 📜 서비스 목록
-- **apigate**: API Gateway (Spring Cloud Gateway)
+- **apigateway**: API Gateway (Spring Cloud Gateway)
 - **discover**: 서비스 검색 및 등록 (Eureka)
 - **config**: 
   - 중앙 설정 관리 (Spring Cloud Config)
   - yml파일은 github에 private로 저장되어 있다.
+- **catalog-service**: 상품 관리 서비스
+- **order-service**: 주문 관리 서비스
 - **common**: (github의 package로 분리함)
   - 공통으로 사용하는 기능 
   - 다른서비스에서 참조하여 사용하기 위하여 만들
@@ -17,7 +19,7 @@
   - Prometheus: http://localhost:9090/
   - Grafana: http://localhost:3000/
 ---
-- **user**: 사용자 관리 서비스
+- **user-service**: 사용자 관리 서비스
 
 
 ## 🔧 기술 스택
